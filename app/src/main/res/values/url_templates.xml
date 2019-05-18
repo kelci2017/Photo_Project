@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- init server url, multiple choice based on situation. -->
+    <!--<string name = "server_url">http://192.168.1.177:9110/</string>-->
+    <string name = "server_url">http://jacob.jandjzone.com:9110/</string>
+
+    <string name="photolist">%1$sphotos/list</string>
+    <string name="photodetail">%1$sphotos/detail?photoid=%2$s</string>
+
+</resources>
