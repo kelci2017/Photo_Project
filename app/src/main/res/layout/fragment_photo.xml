@@ -38,7 +38,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:ems="50"
-                android:text="Photographer"
+                android:text="@string/photographer_label"
                 android:textSize="16dp"
                 android:textStyle="bold" />
 
@@ -64,7 +64,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:ems="50"
-                android:text="Date"
+                android:text="@string/date_label"
                 android:textSize="16dp"
                 android:textStyle="bold" />
 
@@ -90,7 +90,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:ems="50"
-                android:text="Location"
+                android:text="@string/location_label"
                 android:textSize="16dp"
                 android:textStyle="bold" />
 
@@ -116,7 +116,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:ems="50"
-                android:text="Likes"
+                android:text="@string/likes_label"
                 android:textSize="16dp"
                 android:textStyle="bold" />
 
@@ -142,7 +142,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:ems="50"
-                android:text="Filter"
+                android:text="@string/likes_label"
                 android:textSize="16dp"
                 android:textStyle="bold" />
 

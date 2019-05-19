@@ -29,7 +29,7 @@ class PhotoListFragment : BaseFragment() {
         super.onCreateView(inflater, container, savedInstanceState)
 
         rootView = inflater.inflate(R.layout.fragment_photolist, container, false)
-        photosList.clear()
+//        photosList.clear()
 
         photolistViewModel = ViewModelProviders.of(activity as FragmentActivity).get(PhotolistViewModel::class.java)
         photolistViewModel.getPhotolist()
@@ -62,12 +62,12 @@ class PhotoListFragment : BaseFragment() {
 
             val fragmentManager = activity!!.supportFragmentManager
             val bundle = Bundle()
-            bundle.putString("title", selectedItem.title)
-            bundle.putString("image_name", selectedItem.photoLink)
+            bundle.putString(getMainActivity()?.resources!!.getString(R.string.title), selectedItem.title)
+            bundle.putString(getMainActivity()?.resources!!.getString(R.string.image_name), selectedItem.photoLink)
             photoFragment.arguments = bundle
             val fragmentTransaction = fragmentManager.beginTransaction()
 
-            fragmentTransaction.add(R.id.fragment, photoFragment, "PhotoFragment")
+            fragmentTransaction.replace(R.id.fragment, photoFragment, "PhotoFragment")
             fragmentTransaction.addToBackStack(null)
             fragmentTransaction.commit()
         }
@@ -77,7 +77,7 @@ class PhotoListFragment : BaseFragment() {
         viewModel.photolistResult.observe(this,  object : Observer<ArrayList<PhotoListItem>> {
             override fun onChanged(@Nullable baseResult: ArrayList<PhotoListItem>?) {
                 dismissProgressDialog()
-                if (baseResult != null && baseResult!!.count() > 0){
+                if (baseResult != null && baseResult.count() > 0){
                      photosList = baseResult
                     photolistAdapter = PhotoListAdapter(this@PhotoListFragment.context!!, photosList)
                     photolist.adapter = photolistAdapter

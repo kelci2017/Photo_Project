@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">PhotoProject</string>
+    <string name="photographer_label">Photographer</string>
+    <string name="location_label">Location</string>
+    <string name="likes_label">Likes</string>
+    <string name="filter_label">Filter</string>
+    <string name="date_label">Date</string>
+    <string name="photoName">photoName</string>
+    <string name="image_name">image_name</string>
+    <string name="title">title</string>
 </resources>

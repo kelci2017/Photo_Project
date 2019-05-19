@@ -20,6 +20,12 @@ import com.photos.kelci.photoproject.model.datastructure.ImageDetail
 import com.photos.kelci.photoproject.view.helper.DownloadImageFromInternet
 import com.photos.kelci.photoproject.viewmodel.PhotoDetailViewModel
 import kotlinx.android.synthetic.main.fragment_photo.*
+import android.os.AsyncTask.execute
+import android.os.AsyncTask.execute
+
+
+
+
 
 class PhotoFragment : BaseFragment(){
 
@@ -42,7 +48,15 @@ class PhotoFragment : BaseFragment(){
 
         showProgressDialog()
 
-        downloadImageFromInternet = DownloadImageFromInternet(detailImage, progressDialog)
+//        val bitmap = PhotoApplication.photoApplication?.getBitmapFromMemCache(this.name)
+//        if (bitmap != null) {
+//            detailImage?.setImageBitmap(bitmap)
+//        } else {
+//            downloadImageFromInternet = DownloadImageFromInternet(this.name, detailImage, progressDialog)
+//                    .execute(String.format(photoDetailString, serverURL, this.image_name))
+//        }
+
+        downloadImageFromInternet = DownloadImageFromInternet(this.name,detailImage, progressDialog, false)
                 .execute(String.format(photoDetailString, serverURL, this.image_name))
 
         photoDetailViewModel = ViewModelProviders.of(activity as FragmentActivity).get(PhotoDetailViewModel::class.java)
@@ -54,8 +68,8 @@ class PhotoFragment : BaseFragment(){
     }
 
     override fun setArguments(args: Bundle?) {
-        this.title = args?.getString("title")
-        this.image_name = args?.getString("image_name")
+        this.title = args?.getString(PhotoApplication.photoApplication!!.getString(R.string.title))
+        this.image_name = args?.getString(PhotoApplication.photoApplication!!.getString(R.string.image_name))
     }
 
     override fun onStart() {

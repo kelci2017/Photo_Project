@@ -2,6 +2,8 @@ package com.photos.kelci.photoproject.viewmodel
 
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
+import com.photos.kelci.photoproject.PhotoApplication
+import com.photos.kelci.photoproject.R
 import com.photos.kelci.photoproject.model.datastructure.BaseResult
 import com.photos.kelci.photoproject.model.datastructure.ImageDetail
 import com.photos.kelci.photoproject.model.restservice.ServiceUtil
@@ -24,7 +26,7 @@ class PhotoDetailViewModel : ViewModel() {
         restTag.tag = "PhotoDetail"
         var restParams : RestParms = RestParms()
 
-        restParams.setParams("photoName", photoName)
+        restParams.setParams(PhotoApplication.photoApplication!!.getString(R.string.photoName), photoName)
 
 
         ServiceUtil.getPhotoDetail(restTag,restParams,object : RestHandler<Any>(){

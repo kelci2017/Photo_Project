@@ -42,8 +42,16 @@ class PhotoListAdapter(context : Context, items : ArrayList<PhotoListItem>) : Ba
         val thumnailString = PhotoApplication.photoApplication!!.getString(R.string.thumnail)
         val serverURL = PhotoApplication.photoApplication!!.getString(R.string.server_url)
 
-        downloadImageFromInternet = DownloadImageFromInternet(thumnail, null)
-                .execute(String.format(thumnailString, serverURL, items[p0].photoLink))
+        val bitmap = PhotoApplication.photoApplication?.getBitmapFromMemCache(items[p0].photoLink)
+        if (bitmap != null) {
+            thumnail.setImageBitmap(bitmap)
+        } else {
+            downloadImageFromInternet = DownloadImageFromInternet(items[p0].photoLink, thumnail, null, true)
+                    .execute(String.format(thumnailString, serverURL, items[p0].photoLink))
+        }
+
+//        downloadImageFromInternet = DownloadImageFromInternet(items[p0].photoLink, thumnail, null)
+//                .execute(String.format(thumnailString, serverURL, items[p0].photoLink))
 
         return convertview
     }

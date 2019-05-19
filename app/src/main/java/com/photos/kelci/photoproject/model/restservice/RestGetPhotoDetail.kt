@@ -39,7 +39,7 @@ class RestGetPhotoDetail: VolleyService() {
     }
 
     override fun initialize(): RestResult<Any> {
-        photoName = getParameter("photoName") as String
+        photoName = getParameter(PhotoApplication.photoApplication!!.getString(R.string.photoName)) as String
 
         return RestResult()
     }

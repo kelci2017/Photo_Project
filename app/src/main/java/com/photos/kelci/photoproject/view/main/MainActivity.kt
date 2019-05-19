@@ -1,17 +1,21 @@
 package com.photos.kelci.photoproject.view.main
 
+import android.graphics.Bitmap
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v4.util.LruCache
 import com.photos.kelci.photoproject.R
 import com.photos.kelci.photoproject.view.photolist.PhotoListFragment
 import kotlinx.android.synthetic.main.activity_main.*
-import android.support.v4.view.GravityCompat
-import android.support.v4.widget.DrawerLayout
 import com.kelci.familynote.view.base.RootActivity
 
 
+
+
 class MainActivity : RootActivity() {
+
+//    private lateinit var memoryCache: LruCache<String, Bitmap>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,5 +30,13 @@ class MainActivity : RootActivity() {
         fragmentTransaction.add(R.id.fragment, photoListFragment, "PhotolistFragment")
 //        fragmentTransaction.addToBackStack(null)
         fragmentTransaction.commit()
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        val f = supportFragmentManager.findFragmentByTag("PhotolistFragment")
+        if (f is PhotoListFragment) {
+            supportActionBar!!.title = "Photos"
+        }
     }
 }

@@ -6,8 +6,10 @@ import android.graphics.BitmapFactory
 import android.os.AsyncTask
 import android.util.Log
 import android.widget.ImageView
+import com.photos.kelci.photoproject.PhotoApplication
+import java.io.FileInputStream
 
-class DownloadImageFromInternet (var imageView: ImageView?, var progressDialog : ProgressDialog?) : AsyncTask<String, Void, Bitmap>() {
+class DownloadImageFromInternet (var name : String?, var imageView: ImageView?, var progressDialog : ProgressDialog?, var saveCache : Boolean) : AsyncTask<String, Void, Bitmap>() {
 
     override fun doInBackground(vararg urls: String): Bitmap? {
         val imageURL = urls[0]
@@ -15,7 +17,9 @@ class DownloadImageFromInternet (var imageView: ImageView?, var progressDialog :
         try {
             val `in` = java.net.URL(imageURL).openStream()
             bimage = BitmapFactory.decodeStream(`in`)
-
+            if (saveCache) {
+                PhotoApplication.photoApplication?.addBitmapToMemoryCache(name, bimage)
+            }
         } catch (e: Exception) {
             Log.e("Error Message", e.message)
             e.printStackTrace()
