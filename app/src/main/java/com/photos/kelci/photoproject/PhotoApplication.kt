@@ -1,6 +1,7 @@
 package com.photos.kelci.photoproject
 
 import android.app.Application
+import restclient.VolleyService
 
 class PhotoApplication: Application()  {
 
@@ -11,5 +12,6 @@ class PhotoApplication: Application()  {
     override fun onCreate() {
         super.onCreate()
         photoApplication = this
+        VolleyService.setRequestQueue(applicationContext)
     }
 }

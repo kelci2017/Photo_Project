@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.support.annotation.Nullable
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentActivity
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,8 +15,6 @@ import com.photos.kelci.photoproject.R
 import com.photos.kelci.photoproject.view.photo.PhotoFragment
 import kotlinx.android.synthetic.main.fragment_photolist.*
 import android.support.v7.app.AppCompatActivity
-import com.kelci.familynote.view.base.RootActivity
-import com.photos.kelci.photoproject.model.datastructure.BaseResult
 import com.photos.kelci.photoproject.viewmodel.PhotolistViewModel
 
 
@@ -33,17 +30,12 @@ class PhotoListFragment : BaseFragment() {
 
         rootView = inflater.inflate(R.layout.fragment_photolist, container, false)
         photosList.clear()
-        var item1 = PhotoListItem("https://mumbaimirror.indiatimes.com/thumb/msid-59719574,width-320,height-385,resizemode-4.cms", "Cool photo")
-        var item2 = PhotoListItem("http://mumbaimirror.indiatimes.com/thumb/msid-59722654,width-320,height-385,resizemode-4.cms", "Bad photo")
-        var item3 = PhotoListItem("http://mumbaimirror.indiatimes.com/thumb/msid-59722654,width-320,height-385,resizemode-4.cms", "Good photo")
-
-        photosList.add(item1)
-        photosList.add(item2)
-        photosList.add(item3)
-
-        photolistAdapter = PhotoListAdapter(this.context!!, photosList)
 
         photolistViewModel = ViewModelProviders.of(activity as FragmentActivity).get(PhotolistViewModel::class.java)
+        photolistViewModel.getPhotolist()
+
+        showProgressDialog("loading...")
+
         observeViewModel(photolistViewModel)
 
         return rootView
@@ -51,9 +43,13 @@ class PhotoListFragment : BaseFragment() {
 
     override fun onStart() {
         super.onStart()
-        photolist.adapter = photolistAdapter
         setListOnClickListener()
         (activity as AppCompatActivity).supportActionBar!!.title = "Photos"
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        photolistAdapter?.cancelAsyncTask()
     }
 
     private fun setListOnClickListener() {
@@ -67,23 +63,27 @@ class PhotoListFragment : BaseFragment() {
             val fragmentManager = activity!!.supportFragmentManager
             val bundle = Bundle()
             bundle.putString("title", selectedItem.title)
+            bundle.putString("image_name", selectedItem.photoLink)
             photoFragment.arguments = bundle
             val fragmentTransaction = fragmentManager.beginTransaction()
 
-            fragmentTransaction.replace(R.id.fragment, photoFragment, "PhotoFragment")
+            fragmentTransaction.add(R.id.fragment, photoFragment, "PhotoFragment")
             fragmentTransaction.addToBackStack(null)
             fragmentTransaction.commit()
         }
     }
 
     private fun observeViewModel(viewModel : PhotolistViewModel){
-        viewModel.photolistResult.observe(this,  object : Observer<BaseResult> {
-            override fun onChanged(@Nullable baseResult: BaseResult?) {
-//                dismissProgressDialog()
-                if (baseResult!!.isSuccess()){
-
+        viewModel.photolistResult.observe(this,  object : Observer<ArrayList<PhotoListItem>> {
+            override fun onChanged(@Nullable baseResult: ArrayList<PhotoListItem>?) {
+                dismissProgressDialog()
+                if (baseResult != null && baseResult!!.count() > 0){
+                     photosList = baseResult
+                    photolistAdapter = PhotoListAdapter(this@PhotoListFragment.context!!, photosList)
+                    photolist.adapter = photolistAdapter
+                    photolistAdapter?.notifyDataSetChanged()
                 } else {
-//                    activity.errorHandler(baseResult.resultDesc.toString(), "Filter failed!")
+                    showAlertBox("Please check your internet connection or try again later.", "Error loading photos list!")
                 }
             }
         })

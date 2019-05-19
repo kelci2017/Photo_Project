@@ -3,9 +3,12 @@
 
     <!-- init server url, multiple choice based on situation. -->
     <!--<string name = "server_url">http://192.168.1.177:9110/</string>-->
-    <string name = "server_url">http://jacob.jandjzone.com:9110/</string>
+    <string name = "server_url">http://172.16.1.77:9110/</string>
+    <!--<string name = "server_url">http://jacob.jandjzone.com:9110/</string>-->
 
     <string name="photolist">%1$sphotos/list</string>
     <string name="photodetail">%1$sphotos/detail?photoid=%2$s</string>
+    <string name="thumnail">%1$simg/thum/%2$s.JPG</string>
+    <string name="detailphoto">%1$simg/detail/%2$s.JPG</string>
 
 </resources>

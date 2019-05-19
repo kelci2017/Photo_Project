@@ -8,10 +8,10 @@ import com.photos.kelci.photoproject.view.photolist.PhotoListFragment
 import kotlinx.android.synthetic.main.activity_main.*
 import android.support.v4.view.GravityCompat
 import android.support.v4.widget.DrawerLayout
+import com.kelci.familynote.view.base.RootActivity
 
 
-
-class MainActivity : AppCompatActivity() {
+class MainActivity : RootActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

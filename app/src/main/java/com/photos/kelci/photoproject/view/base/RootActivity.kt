@@ -20,11 +20,7 @@ open class RootActivity : AppCompatActivity() {
 
     private var progressDialog: ProgressDialog? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
     fun dismissProgressDialog() {
-        //Modified by Ethan on 02/22/2016, If dismissProgressDialog throw exception, still log out
         try {
             if (progressDialog != null || progressDialog!!.isShowing) {
                 progressDialog?.dismiss()
@@ -33,13 +29,6 @@ open class RootActivity : AppCompatActivity() {
             return
         }
 
-    }
-
-    fun isProgressDialogShowing(): Boolean {
-        when (progressDialog == null) {
-            true -> return false
-            false -> return true
-        }
     }
 
     fun showAlertBox(errorMessage: String, title : String) {
@@ -87,6 +76,22 @@ open class RootActivity : AppCompatActivity() {
 
     fun showProgressDialog(message: String?) {
         var message = message
+        if (message == null) message = ""
+
+        if (progressDialog == null) {
+
+            try {
+                progressDialog = ProgressDialog.show(this, "", message, false)
+                progressDialog?.show()
+            } catch (e: Exception) {
+            }
+
+        }
+    }
+
+    fun showProgressDialog(message: String?, progressDialog: ProgressDialog?) {
+        var message = message
+        var progressDialog = progressDialog
         if (message == null) message = ""
 
         if (progressDialog == null) {

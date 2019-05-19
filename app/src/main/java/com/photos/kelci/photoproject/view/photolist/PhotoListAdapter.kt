@@ -1,19 +1,25 @@
 package com.photos.kelci.photoproject.view.photolist
 
 import android.content.Context
+import android.graphics.Bitmap
+import android.os.AsyncTask
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.ImageView
 import android.widget.TextView
+import com.photos.kelci.photoproject.PhotoApplication
 import com.photos.kelci.photoproject.R
 import java.util.ArrayList
+import com.photos.kelci.photoproject.view.helper.DownloadImageFromInternet
+
 
 class PhotoListAdapter(context : Context, items : ArrayList<PhotoListItem>) : BaseAdapter() {
 
     private var context : Context = context
     private var items : ArrayList<PhotoListItem> = items
+    private var downloadImageFromInternet : AsyncTask<String, Void, Bitmap>? = null
 
     override fun getCount(): Int {
         return items.count()
@@ -32,13 +38,21 @@ class PhotoListAdapter(context : Context, items : ArrayList<PhotoListItem>) : Ba
         val title = convertview.findViewById(R.id.photo_disc) as TextView
 
         title.text = items[p0].title
-        //need download image from internet
-//        thumnail.drawable =
+
+        val thumnailString = PhotoApplication.photoApplication!!.getString(R.string.thumnail)
+        val serverURL = PhotoApplication.photoApplication!!.getString(R.string.server_url)
+
+        downloadImageFromInternet = DownloadImageFromInternet(thumnail, null)
+                .execute(String.format(thumnailString, serverURL, items[p0].photoLink))
 
         return convertview
     }
 
     override fun getItemId(p0: Int): Long {
         return p0.toLong()
+    }
+
+    public fun cancelAsyncTask(){
+        downloadImageFromInternet?.cancel(false)
     }
 }
