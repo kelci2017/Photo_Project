@@ -5,13 +5,13 @@ import com.photos.kelci.photoproject.R
 import com.photos.kelci.photoproject.model.datastructure.BaseResult
 import com.photos.kelci.photoproject.model.datastructure.ImageListItem
 import com.photos.kelci.photoproject.utilities.CommonCodes
-import com.photos.kelci.photoproject.utilities.ServerResponseChecker
 import com.photos.kelci.photoproject.view.photolist.PhotoListItem
 import org.json.JSONObject
 import restclient.RestResult
 import restclient.VolleyService
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import com.photos.kelci.photoproject.utilities.ServerResponseChecker
 
 class RestGetPhotolist : VolleyService() {
 
@@ -45,7 +45,9 @@ class RestGetPhotolist : VolleyService() {
         var photolist = ArrayList<PhotoListItem>()
 
         for (imageItem in imageList) {
-            val photoItem = PhotoListItem(imageItem.image_name, imageItem.image_title)
+            val thumnailString = PhotoApplication.photoApplication!!.getString(R.string.thumnail)
+            val serverURL = PhotoApplication.photoApplication!!.getString(R.string.server_url)
+            val photoItem = PhotoListItem(imageItem.image_name, String.format(thumnailString, serverURL, imageItem.image_name), imageItem.image_title)
             photolist.add(photoItem)
         }
         return photolist

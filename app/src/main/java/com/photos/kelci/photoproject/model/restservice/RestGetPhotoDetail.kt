@@ -6,9 +6,9 @@ import com.photos.kelci.photoproject.PhotoApplication
 import com.photos.kelci.photoproject.R
 import com.photos.kelci.photoproject.model.datastructure.BaseResult
 import com.photos.kelci.photoproject.model.datastructure.ImageDetail
-import com.photos.kelci.photoproject.model.datastructure.ImageListItem
 import com.photos.kelci.photoproject.utilities.CommonCodes
 import com.photos.kelci.photoproject.utilities.ServerResponseChecker
+import com.photos.kelci.photoproject.view.photo.PhotoDetail
 import org.json.JSONObject
 import restclient.RestResult
 import restclient.VolleyService
@@ -16,9 +16,9 @@ import restclient.VolleyService
 class RestGetPhotoDetail: VolleyService() {
     var photoName : String = ""
 
-    override fun parseResult(result: JSONObject?): RestResult<ImageDetail> {
+    override fun parseResult(result: JSONObject?): RestResult<PhotoDetail> {
         val errorCode = ServerResponseChecker.onCheck(result.toString())
-        val nullImageDetail = ImageDetail(null, null, null, null, null)
+        val nullImageDetail = PhotoDetail(null, null, null, null, null, null, null)
         if (errorCode != CommonCodes.NO_ERROR) {
             return RestResult(nullImageDetail)
         }
@@ -29,7 +29,9 @@ class RestGetPhotoDetail: VolleyService() {
         val jsonText = gson.toJson(baseResult.resultDesc)
         val imageDetail = gson.fromJson(jsonText, type) as ImageDetail
 
-        return RestResult(imageDetail)
+        val photoDetail = convertDataStructure(imageDetail)
+
+        return RestResult(photoDetail)
     }
 
     override fun getUrl(): String {
@@ -44,5 +46,14 @@ class RestGetPhotoDetail: VolleyService() {
         photoName = getParameter(PhotoApplication.photoApplication!!.getString(R.string.photoName)) as String
 
         return RestResult()
+    }
+
+    private fun convertDataStructure(imageDetail : ImageDetail ) : PhotoDetail {
+        val photoDetailString = PhotoApplication.photoApplication!!.getString(R.string.detailphoto)
+        val serverURL = PhotoApplication.photoApplication!!.getString(R.string.server_url)
+
+        val photoDetail = PhotoDetail(this.photoName, String.format(photoDetailString, serverURL, this.photoName), imageDetail.photographer, imageDetail.location, imageDetail.likes, imageDetail.filter, imageDetail.date)
+
+        return photoDetail
     }
 }

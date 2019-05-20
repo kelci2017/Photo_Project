@@ -44,6 +44,12 @@ class PhotoListFragment : BaseFragment() {
         super.onStart()
         setListOnClickListener()
         (activity as AppCompatActivity).supportActionBar!!.title = "Photos"
+        if (photolistViewModel.photolistResult.value != null) {
+            photolistAdapter = PhotoListAdapter(this@PhotoListFragment.context!!, photolistViewModel.photolistResult.value as java.util.ArrayList<PhotoListItem>)
+            photolist.adapter = photolistAdapter
+            photolistAdapter?.notifyDataSetChanged()
+        }
+
     }
 
     override fun onDestroyView() {
@@ -62,7 +68,7 @@ class PhotoListFragment : BaseFragment() {
             val fragmentManager = activity!!.supportFragmentManager
             val bundle = Bundle()
             bundle.putString(getMainActivity()?.resources!!.getString(R.string.title), selectedItem.title)
-            bundle.putString(getMainActivity()?.resources!!.getString(R.string.image_name), selectedItem.photoLink)
+            bundle.putString(getMainActivity()?.resources!!.getString(R.string.image_name), selectedItem.photoId)
             photoFragment.arguments = bundle
             val fragmentTransaction = fragmentManager.beginTransaction()
 

@@ -7,6 +7,7 @@ import com.photos.kelci.photoproject.R
 import com.photos.kelci.photoproject.model.datastructure.BaseResult
 import com.photos.kelci.photoproject.model.datastructure.ImageDetail
 import com.photos.kelci.photoproject.model.restservice.ServiceUtil
+import com.photos.kelci.photoproject.view.photo.PhotoDetail
 import restclient.RestHandler
 import restclient.RestParms
 import restclient.RestResult
@@ -14,7 +15,7 @@ import restclient.RestTag
 
 class PhotoDetailViewModel : ViewModel() {
 
-    var photoDetailResult = MutableLiveData<ImageDetail>()
+    var photoDetailResult = MutableLiveData<PhotoDetail>()
 
     fun getPhotoDetail(photoName : String?) {
         var restHandler : RestHandler<BaseResult>? = null
@@ -31,7 +32,7 @@ class PhotoDetailViewModel : ViewModel() {
         ServiceUtil.getPhotoDetail(restTag,restParams,object : RestHandler<Any>(){
             override fun onReturn(result: RestResult<Any>?) {
 
-                val baseResult : ImageDetail? = result?.resultObject as? ImageDetail
+                val baseResult : PhotoDetail? = result?.resultObject as? PhotoDetail
 
                 photoDetailResult.value = baseResult
             }

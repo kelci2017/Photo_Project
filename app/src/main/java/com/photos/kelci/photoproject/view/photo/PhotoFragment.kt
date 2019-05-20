@@ -3,6 +3,7 @@ package com.photos.kelci.photoproject.view.photo
 import android.app.ProgressDialog
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
+import android.content.res.Configuration
 import android.graphics.Bitmap
 import android.os.AsyncTask
 import android.os.Bundle
@@ -37,13 +38,7 @@ class PhotoFragment : BaseFragment(){
         rootView = inflater.inflate(R.layout.fragment_photo, container, false)
         detailImage = rootView?.findViewById(R.id.imageView)
 
-        val photoDetailString = PhotoApplication.photoApplication!!.getString(R.string.detailphoto)
-        val serverURL = PhotoApplication.photoApplication!!.getString(R.string.server_url)
-
         showProgressDialog()
-
-        downloadImageFromInternet = DownloadImageFromInternet(this.name,detailImage, progressDialog, false)
-                .execute(String.format(photoDetailString, serverURL, this.image_name))
 
         photoDetailViewModel = ViewModelProviders.of(activity as FragmentActivity).get(PhotoDetailViewModel::class.java)
         photoDetailViewModel.getPhotoDetail(image_name)
@@ -81,8 +76,8 @@ class PhotoFragment : BaseFragment(){
         }
     }
     private fun observeViewModel(viewModel : PhotoDetailViewModel){
-        viewModel.photoDetailResult.observe(this,  object : Observer<ImageDetail> {
-            override fun onChanged(@Nullable imageDetail : ImageDetail?) {
+        viewModel.photoDetailResult.observe(this,  object : Observer<PhotoDetail> {
+            override fun onChanged(@Nullable imageDetail : PhotoDetail?) {
                 if (imageDetail?.photographer == null) {
                     showAlertBox("Please check your internet connection or try again later.", "Error loading photo details!")
                 } else {
@@ -91,9 +86,16 @@ class PhotoFragment : BaseFragment(){
                     location.text = imageDetail.location
                     likes.text = imageDetail.likes.toString()
                     filter.text = imageDetail.filter.toString()
+                    downloadImageFromInternet = DownloadImageFromInternet(imageDetail.photoId,detailImage, progressDialog, false)
+                            .execute(imageDetail.photoLink)
                 }
 
             }
         })
+    }
+
+    override fun onConfigurationChanged(newConfig: Configuration?) {
+        super.onConfigurationChanged(newConfig)
+        downloadImageFromInternet?.cancel(false)
     }
 }
