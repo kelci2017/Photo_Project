@@ -1,10 +1,7 @@
 package com.photos.kelci.photoproject.view.main
 
-import android.graphics.Bitmap
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.support.v4.util.LruCache
 import com.photos.kelci.photoproject.R
 import com.photos.kelci.photoproject.view.photolist.PhotoListFragment
 import kotlinx.android.synthetic.main.activity_main.*
@@ -14,8 +11,6 @@ import com.kelci.familynote.view.base.RootActivity
 
 
 class MainActivity : RootActivity() {
-
-//    private lateinit var memoryCache: LruCache<String, Bitmap>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,7 +23,7 @@ class MainActivity : RootActivity() {
         val fragmentTransaction = fragmentManager.beginTransaction()
 
         fragmentTransaction.add(R.id.fragment, photoListFragment, "PhotolistFragment")
-//        fragmentTransaction.addToBackStack(null)
+
         fragmentTransaction.commit()
     }
 

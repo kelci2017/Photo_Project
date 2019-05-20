@@ -7,7 +7,6 @@ import com.photos.kelci.photoproject.R
 import com.photos.kelci.photoproject.model.datastructure.BaseResult
 import com.photos.kelci.photoproject.model.datastructure.ImageDetail
 import com.photos.kelci.photoproject.model.restservice.ServiceUtil
-import com.photos.kelci.photoproject.utilities.CommonCodes
 import restclient.RestHandler
 import restclient.RestParms
 import restclient.RestResult

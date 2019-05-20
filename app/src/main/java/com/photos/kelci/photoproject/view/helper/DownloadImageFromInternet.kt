@@ -7,7 +7,6 @@ import android.os.AsyncTask
 import android.util.Log
 import android.widget.ImageView
 import com.photos.kelci.photoproject.PhotoApplication
-import java.io.FileInputStream
 
 class DownloadImageFromInternet (var name : String?, var imageView: ImageView?, var progressDialog : ProgressDialog?, var saveCache : Boolean) : AsyncTask<String, Void, Bitmap>() {
 

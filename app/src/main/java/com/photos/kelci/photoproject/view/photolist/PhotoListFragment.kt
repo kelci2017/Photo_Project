@@ -29,7 +29,6 @@ class PhotoListFragment : BaseFragment() {
         super.onCreateView(inflater, container, savedInstanceState)
 
         rootView = inflater.inflate(R.layout.fragment_photolist, container, false)
-//        photosList.clear()
 
         photolistViewModel = ViewModelProviders.of(activity as FragmentActivity).get(PhotolistViewModel::class.java)
         photolistViewModel.getPhotolist()

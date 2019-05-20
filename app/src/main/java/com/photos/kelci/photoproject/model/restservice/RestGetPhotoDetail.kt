@@ -18,10 +18,12 @@ class RestGetPhotoDetail: VolleyService() {
 
     override fun parseResult(result: JSONObject?): RestResult<ImageDetail> {
         val errorCode = ServerResponseChecker.onCheck(result.toString())
+        val nullImageDetail = ImageDetail(null, null, null, null, null)
         if (errorCode != CommonCodes.NO_ERROR) {
-            return RestResult(ImageDetail(null, null, null, null, null))
+            return RestResult(nullImageDetail)
         }
         val baseResult = fromJson<BaseResult>(result.toString(), BaseResult::class.java)
+        if (!baseResult.isSuccess()) return RestResult(nullImageDetail)
         val gson = Gson()
         val type = object : TypeToken<ImageDetail>() {}.type
         val jsonText = gson.toJson(baseResult.resultDesc)

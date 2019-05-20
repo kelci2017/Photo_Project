@@ -20,12 +20,6 @@ import com.photos.kelci.photoproject.model.datastructure.ImageDetail
 import com.photos.kelci.photoproject.view.helper.DownloadImageFromInternet
 import com.photos.kelci.photoproject.viewmodel.PhotoDetailViewModel
 import kotlinx.android.synthetic.main.fragment_photo.*
-import android.os.AsyncTask.execute
-import android.os.AsyncTask.execute
-
-
-
-
 
 class PhotoFragment : BaseFragment(){
 
@@ -47,14 +41,6 @@ class PhotoFragment : BaseFragment(){
         val serverURL = PhotoApplication.photoApplication!!.getString(R.string.server_url)
 
         showProgressDialog()
-
-//        val bitmap = PhotoApplication.photoApplication?.getBitmapFromMemCache(this.name)
-//        if (bitmap != null) {
-//            detailImage?.setImageBitmap(bitmap)
-//        } else {
-//            downloadImageFromInternet = DownloadImageFromInternet(this.name, detailImage, progressDialog)
-//                    .execute(String.format(photoDetailString, serverURL, this.image_name))
-//        }
 
         downloadImageFromInternet = DownloadImageFromInternet(this.name,detailImage, progressDialog, false)
                 .execute(String.format(photoDetailString, serverURL, this.image_name))
@@ -100,11 +86,11 @@ class PhotoFragment : BaseFragment(){
                 if (imageDetail?.photographer == null) {
                     showAlertBox("Please check your internet connection or try again later.", "Error loading photo details!")
                 } else {
-                    author_name.text = imageDetail?.photographer
-                    date.text = imageDetail?.date
-                    location.text = imageDetail?.location
-                    likes.text = imageDetail?.likes.toString()
-                    filter.text = imageDetail?.filter.toString()
+                    author_name.text = imageDetail.photographer
+                    date.text = imageDetail.date
+                    location.text = imageDetail.location
+                    likes.text = imageDetail.likes.toString()
+                    filter.text = imageDetail.filter.toString()
                 }
 
             }

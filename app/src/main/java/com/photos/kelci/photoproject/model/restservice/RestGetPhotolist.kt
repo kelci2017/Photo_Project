@@ -22,7 +22,8 @@ class RestGetPhotolist : VolleyService() {
             return RestResult(ArrayList<PhotoListItem>())
         }
         val baseResult = fromJson<BaseResult>(result.toString(), BaseResult::class.java)
-        //check type before cast!!!!
+
+        if(!baseResult.isSuccess()) return RestResult(ArrayList<PhotoListItem>())
         val gson = Gson()
         val type = object : TypeToken<ArrayList<ImageListItem>>() {}.type
         val jsonText = gson.toJson(baseResult.resultDesc)

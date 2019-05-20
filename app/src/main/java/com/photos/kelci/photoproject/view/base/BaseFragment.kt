@@ -1,6 +1,5 @@
 package com.kelci.familynote.view.base
 
-import android.app.ProgressDialog
 import android.support.v4.app.Fragment
 
 open class BaseFragment : Fragment() {
@@ -32,27 +31,6 @@ open class BaseFragment : Fragment() {
         var mainActivity = getMainActivity ()
 
         mainActivity?.let { mainActivity.showProgressDialog(message) }
-    }
-
-    fun showProgressDialog(message : String, progressDialog: ProgressDialog?)
-    {
-        var mainActivity = getMainActivity ()
-
-        mainActivity?.let { mainActivity.showProgressDialog(message, progressDialog) }
-    }
-
-    protected fun showProgressDialog(resourceId: Int) {
-        val mainActivity = getMainActivity()
-        if (mainActivity != null) {
-            var message = ""
-            //check whether the resource exists
-            try {
-                message = getString(resourceId)
-            } catch (e: Exception) {
-            }
-
-            mainActivity.showProgressDialog(message)
-        }
     }
 
     fun dismissProgressDialog() {

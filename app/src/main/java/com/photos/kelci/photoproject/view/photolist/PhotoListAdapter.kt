@@ -50,9 +50,6 @@ class PhotoListAdapter(context : Context, items : ArrayList<PhotoListItem>) : Ba
                     .execute(String.format(thumnailString, serverURL, items[p0].photoLink))
         }
 
-//        downloadImageFromInternet = DownloadImageFromInternet(items[p0].photoLink, thumnail, null)
-//                .execute(String.format(thumnailString, serverURL, items[p0].photoLink))
-
         return convertview
     }
 
@@ -60,7 +57,7 @@ class PhotoListAdapter(context : Context, items : ArrayList<PhotoListItem>) : Ba
         return p0.toLong()
     }
 
-    public fun cancelAsyncTask(){
+    fun cancelAsyncTask(){
         downloadImageFromInternet?.cancel(false)
     }
 }
