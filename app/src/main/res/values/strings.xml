@@ -8,4 +8,5 @@
     <string name="photoName">photoName</string>
     <string name="image_name">image_name</string>
     <string name="title">title</string>
+    <string name="photoLink">photoLink</string>
 </resources>

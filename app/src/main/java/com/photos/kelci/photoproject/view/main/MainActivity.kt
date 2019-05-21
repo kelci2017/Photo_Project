@@ -17,14 +17,28 @@ class MainActivity : RootActivity() {
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
 
-        var photoListFragment = PhotoListFragment() as Fragment
+        val fragment = supportFragmentManager.findFragmentByTag("PhotolistFragment")
+        val photoListFragment : PhotoListFragment
+        if(fragment == null){
+            photoListFragment = PhotoListFragment()
+            val fragmentManager = supportFragmentManager
+            val fragmentTransaction = fragmentManager.beginTransaction()
 
-        val fragmentManager = supportFragmentManager
-        val fragmentTransaction = fragmentManager.beginTransaction()
+            fragmentTransaction.add(R.id.fragment, photoListFragment, "PhotolistFragment")
 
-        fragmentTransaction.add(R.id.fragment, photoListFragment, "PhotolistFragment")
+            fragmentTransaction.commit()
+        }else{
+            photoListFragment = fragment as PhotoListFragment
+        }
 
-        fragmentTransaction.commit()
+//        var photoListFragment = PhotoListFragment() as Fragment
+
+//        val fragmentManager = supportFragmentManager
+//        val fragmentTransaction = fragmentManager.beginTransaction()
+//
+//        fragmentTransaction.add(R.id.fragment, photoListFragment, "PhotolistFragment")
+//
+//        fragmentTransaction.commit()
     }
 
     override fun onBackPressed() {

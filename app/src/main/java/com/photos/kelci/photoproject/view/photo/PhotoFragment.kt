@@ -3,13 +3,17 @@ package com.photos.kelci.photoproject.view.photo
 import android.app.ProgressDialog
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
+import android.content.*
 import android.content.res.Configuration
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.AsyncTask
 import android.os.Bundle
+import android.os.IBinder
 import android.support.annotation.Nullable
 import android.support.v4.app.FragmentActivity
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,26 +21,33 @@ import android.widget.ImageView
 import com.kelci.familynote.view.base.BaseFragment
 import com.photos.kelci.photoproject.PhotoApplication
 import com.photos.kelci.photoproject.R
-import com.photos.kelci.photoproject.model.datastructure.ImageDetail
-import com.photos.kelci.photoproject.view.helper.DownloadImageFromInternet
+import com.photos.kelci.photoproject.view.helper.DoanloadImageService
 import com.photos.kelci.photoproject.viewmodel.PhotoDetailViewModel
 import kotlinx.android.synthetic.main.fragment_photo.*
+import android.support.v4.content.LocalBroadcastManager
+
 
 class PhotoFragment : BaseFragment(){
 
     private var rootView : View? = null
     private var detailImage : ImageView? = null
-    var title : String? = ""
-    var image_name : String? = ""
+    private var title : String? = ""
+    private var image_name : String? = ""
+    private var bitmap : Bitmap? = null
     private var progressDialog: ProgressDialog? = null
     private var downloadImageFromInternet : AsyncTask<String, Void, Bitmap>? = null
     private lateinit var photoDetailViewModel: PhotoDetailViewModel
+    private var SERVICE_BOUND = false
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
 
         rootView = inflater.inflate(R.layout.fragment_photo, container, false)
         detailImage = rootView?.findViewById(R.id.imageView)
+        if (savedInstanceState != null) {
+            this.title = savedInstanceState.getString("title")
+            this.image_name = savedInstanceState.getString("image_name")
+        }
 
         showProgressDialog()
 
@@ -48,6 +59,11 @@ class PhotoFragment : BaseFragment(){
         return rootView
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString("title", this.title)
+        outState.putString("image_name", this.image_name)
+    }
     override fun setArguments(args: Bundle?) {
         this.title = args?.getString(PhotoApplication.photoApplication!!.getString(R.string.title))
         this.image_name = args?.getString(PhotoApplication.photoApplication!!.getString(R.string.image_name))
@@ -56,12 +72,27 @@ class PhotoFragment : BaseFragment(){
     override fun onStart() {
         super.onStart()
         (activity as AppCompatActivity).supportActionBar!!.title = this.title
-
+        messageReceiver = BiddingServicesMessageReceiver()
+        val intentFilter = IntentFilter()
+        intentFilter.addAction(DoanloadImageService.BROADCAST_ACTION)
+        LocalBroadcastManager.getInstance(PhotoApplication.photoApplication!!.applicationContext).registerReceiver(messageReceiver!!, intentFilter)
     }
 
+    override fun onStop() {
+        super.onStop()
+        if (messageReceiver != null) {
+            //to prevent "Receiver not registered" error because sometime the receiver was not registered.
+            try {
+                LocalBroadcastManager.getInstance(PhotoApplication.photoApplication!!.applicationContext).unregisterReceiver(messageReceiver!!)
+            } catch (e: Exception) {
+            }
+
+        }
+    }
     override fun onDestroyView() {
         super.onDestroyView()
         downloadImageFromInternet?.cancel(false)
+        getMainActivity()?.unbindService(downloadServiceConnection)
     }
 
     private fun showProgressDialog(){
@@ -86,8 +117,7 @@ class PhotoFragment : BaseFragment(){
                     location.text = imageDetail.location
                     likes.text = imageDetail.likes.toString()
                     filter.text = imageDetail.filter.toString()
-                    downloadImageFromInternet = DownloadImageFromInternet(imageDetail.photoId,detailImage, progressDialog, false)
-                            .execute(imageDetail.photoLink)
+                    downloadImage(imageDetail.photoLink)
                 }
 
             }
@@ -97,5 +127,37 @@ class PhotoFragment : BaseFragment(){
     override fun onConfigurationChanged(newConfig: Configuration?) {
         super.onConfigurationChanged(newConfig)
         downloadImageFromInternet?.cancel(false)
+    }
+
+    private fun downloadImage(photoLink : String?) {
+        // Bind to LocalService
+        var intent = Intent(getMainActivity(), DoanloadImageService::class.java)
+        intent.putExtra(PhotoApplication.photoApplication!!.getString(R.string.photoLink),photoLink)
+
+        getMainActivity()?.bindService(intent, downloadServiceConnection, Context.BIND_AUTO_CREATE)
+    }
+
+    private val downloadServiceConnection = object : ServiceConnection {
+        override fun onServiceConnected(className: ComponentName, service: IBinder) {
+            Log.i(javaClass.name, "onServiceConnected")
+            SERVICE_BOUND = true
+        }
+
+        override fun onServiceDisconnected(arg0: ComponentName) {
+            Log.i(javaClass.name, "onServiceDisconnected")
+            SERVICE_BOUND = false
+        }
+    }
+
+    private var messageReceiver: BiddingServicesMessageReceiver? = null
+
+    private inner class BiddingServicesMessageReceiver : BroadcastReceiver() {
+        override fun onReceive(context: Context, intent: Intent) {
+            progressDialog?.cancel()
+            val notificationData = intent.extras
+            val byteArray = notificationData.getByteArray(DoanloadImageService.BROADCAST_KEY)
+            bitmap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size)
+            detailImage?.setImageBitmap(bitmap)
+        }
     }
 }
