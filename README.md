@@ -8,7 +8,8 @@
 * Photo thumnail was saved in the memory cache once downloaded
 * Always check whether the needed thumnail was in memory cache before downloading from internet, if so, populate the thumnail from memory cache
 * When list items was clicked, fetching photo details from server
-* The detail page was downloaded within an asynctask
+* The detail page was downloaded within an asynctask in the master branch and was downloaded with bind service in the other branch with_rotation
+* Rotaion is enabled in the with_rotaion branch and disabled in the master branch
 
 * The view part is mainly the UI, such as the PhotoFragment and PhotolistFragment
 * Fetching data from server is in the ViewModel
