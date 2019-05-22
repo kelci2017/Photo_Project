@@ -34,7 +34,6 @@ class PhotoFragment : BaseFragment(){
     private var title : String? = ""
     private var image_name : String? = ""
     private var bitmap : Bitmap? = null
-    private var progressDialog: ProgressDialog? = null
     private var downloadImageFromInternet : AsyncTask<String, Void, Bitmap>? = null
     private lateinit var photoDetailViewModel: PhotoDetailViewModel
     private var SERVICE_BOUND = false
@@ -49,7 +48,7 @@ class PhotoFragment : BaseFragment(){
             this.image_name = savedInstanceState.getString("image_name")
         }
 
-        showProgressDialog()
+        showProgressDialog("loading...")
 
         photoDetailViewModel = ViewModelProviders.of(activity as FragmentActivity).get(PhotoDetailViewModel::class.java)
         photoDetailViewModel.getPhotoDetail(image_name)
@@ -95,17 +94,6 @@ class PhotoFragment : BaseFragment(){
         getMainActivity()?.unbindService(downloadServiceConnection)
     }
 
-    private fun showProgressDialog(){
-        if (progressDialog == null) {
-
-            try {
-                progressDialog = ProgressDialog.show(getMainActivity(), "", "loading...", false)
-                progressDialog?.show()
-            } catch (e: Exception) {
-            }
-
-        }
-    }
     private fun observeViewModel(viewModel : PhotoDetailViewModel){
         viewModel.photoDetailResult.observe(this,  object : Observer<PhotoDetail> {
             override fun onChanged(@Nullable imageDetail : PhotoDetail?) {
@@ -153,7 +141,7 @@ class PhotoFragment : BaseFragment(){
 
     private inner class BiddingServicesMessageReceiver : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
-            progressDialog?.cancel()
+            dismissProgressDialog()
             val notificationData = intent.extras
             val byteArray = notificationData.getByteArray(DownloadImageService.BROADCAST_PHOTO_KEY)
             val errorMessage = notificationData.getString(DownloadImageService.BROADCAST_MESSAGE_KEY)

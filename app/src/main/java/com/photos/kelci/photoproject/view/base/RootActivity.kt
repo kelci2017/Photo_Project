@@ -73,7 +73,7 @@ open class RootActivity : AppCompatActivity() {
         var message = message
         if (message == null) message = ""
 
-        if (progressDialog == null) {
+        if (progressDialog == null || (!progressDialog!!.isShowing)) {
 
             try {
                 progressDialog = ProgressDialog.show(this, "", message, false)
