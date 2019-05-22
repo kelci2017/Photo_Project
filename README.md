@@ -24,6 +24,8 @@
 
 **Demo**
 
-![PhotosScreenshot](https://github.com/kelci2017/Photo_Project/blob/master/photolist.png)
-![DetailScreenshot](https://github.com/kelci2017/Photo_Project/blob/master/photodetail.png)
-![Demo](https://github.com/kelci2017/Photo_Project/blob/master/demo.gif)
+![PhotosScreenshot](https://github.com/kelci2017/Photo_Project/blob/master/photolist1.png)
+![DetailScreenshot](https://github.com/kelci2017/Photo_Project/blob/master/photolist.png)
+![PhotosScreenshot](https://github.com/kelci2017/Photo_Project/blob/master/portrait_detail1.png)
+![DetailScreenshot](https://github.com/kelci2017/Photo_Project/blob/master/landscape_detail.png)
+![Demo](https://github.com/kelci2017/Photo_Project/blob/master/demo1.gif)
