@@ -21,10 +21,10 @@ import android.widget.ImageView
 import com.kelci.familynote.view.base.BaseFragment
 import com.photos.kelci.photoproject.PhotoApplication
 import com.photos.kelci.photoproject.R
-import com.photos.kelci.photoproject.view.helper.DoanloadImageService
+import com.photos.kelci.photoproject.view.helper.DownloadImageService
 import com.photos.kelci.photoproject.viewmodel.PhotoDetailViewModel
-import kotlinx.android.synthetic.main.fragment_photo.*
 import android.support.v4.content.LocalBroadcastManager
+import kotlinx.android.synthetic.main.fragment_photo.*
 
 
 class PhotoFragment : BaseFragment(){
@@ -74,7 +74,7 @@ class PhotoFragment : BaseFragment(){
         (activity as AppCompatActivity).supportActionBar!!.title = this.title
         messageReceiver = BiddingServicesMessageReceiver()
         val intentFilter = IntentFilter()
-        intentFilter.addAction(DoanloadImageService.BROADCAST_ACTION)
+        intentFilter.addAction(DownloadImageService.BROADCAST_ACTION)
         LocalBroadcastManager.getInstance(PhotoApplication.photoApplication!!.applicationContext).registerReceiver(messageReceiver!!, intentFilter)
     }
 
@@ -131,7 +131,7 @@ class PhotoFragment : BaseFragment(){
 
     private fun downloadImage(photoLink : String?) {
         // Bind to LocalService
-        var intent = Intent(getMainActivity(), DoanloadImageService::class.java)
+        var intent = Intent(getMainActivity(), DownloadImageService::class.java)
         intent.putExtra(PhotoApplication.photoApplication!!.getString(R.string.photoLink),photoLink)
 
         getMainActivity()?.bindService(intent, downloadServiceConnection, Context.BIND_AUTO_CREATE)
@@ -155,7 +155,13 @@ class PhotoFragment : BaseFragment(){
         override fun onReceive(context: Context, intent: Intent) {
             progressDialog?.cancel()
             val notificationData = intent.extras
-            val byteArray = notificationData.getByteArray(DoanloadImageService.BROADCAST_KEY)
+            val byteArray = notificationData.getByteArray(DownloadImageService.BROADCAST_PHOTO_KEY)
+            val errorMessage = notificationData.getString(DownloadImageService.BROADCAST_MESSAGE_KEY)
+            if (errorMessage != null) {
+                getMainActivity()?.showAlertBox(errorMessage, "Photo download failed!")
+                detailImage?.setImageBitmap(BitmapFactory.decodeResource(getMainActivity()?.resources, R.drawable.sad_face))
+                return
+            }
             bitmap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size)
             detailImage?.setImageBitmap(bitmap)
         }

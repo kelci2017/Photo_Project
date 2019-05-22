@@ -19,7 +19,7 @@
             </intent-filter>
         </activity>
         <service
-            android:name=".view.helper.DoanloadImageService"
+            android:name=".view.helper.DownloadImageService"
             android:enabled="true"
             android:exported="true" >
         </service>
