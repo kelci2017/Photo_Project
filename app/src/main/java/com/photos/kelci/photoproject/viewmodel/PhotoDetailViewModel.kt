@@ -2,6 +2,7 @@ package com.photos.kelci.photoproject.viewmodel
 
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
+import android.util.Log
 import com.photos.kelci.photoproject.PhotoApplication
 import com.photos.kelci.photoproject.R
 import com.photos.kelci.photoproject.model.datastructure.BaseResult
@@ -15,9 +16,10 @@ import restclient.RestTag
 
 class PhotoDetailViewModel : ViewModel() {
 
-    var photoDetailResult = MutableLiveData<PhotoDetail>()
+    var photoDetailResult = MultipleObserverLiveDate<PhotoDetail>()
 
     fun getPhotoDetail(photoName : String?) {
+
         var restHandler : RestHandler<BaseResult>? = null
 
         restHandler as RestHandler<Any>?

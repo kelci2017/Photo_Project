@@ -29,6 +29,8 @@ class DownloadImageService : Service(), Runnable {
 
         super.onCreate()
 
+        Log.i("&&&&&&&&&&&", url)
+
         val mythread = Thread(this)
 
         mythread.start()
@@ -79,6 +81,7 @@ class DownloadImageService : Service(), Runnable {
     override fun onBind(intent: Intent): IBinder? {
 
         this.url = intent.getStringExtra(PhotoApplication.photoApplication!!.getString(R.string.photoLink))
+        Log.i("&&&&&&&&&&& ", url)
 
         return mBinder
 

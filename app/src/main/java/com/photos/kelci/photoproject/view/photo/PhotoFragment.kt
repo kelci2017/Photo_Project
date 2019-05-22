@@ -96,7 +96,7 @@ class PhotoFragment : BaseFragment(){
 
     private fun observeViewModel(viewModel : PhotoDetailViewModel){
         viewModel.photoDetailResult.observe(this,  object : Observer<PhotoDetail> {
-            override fun onChanged(@Nullable imageDetail : PhotoDetail?) {
+            override fun onChanged(imageDetail : PhotoDetail?) {
                 if (imageDetail?.photographer == null) {
                     showAlertBox("Please check your internet connection or try again later.", "Error loading photo details!")
                 } else {
@@ -121,7 +121,9 @@ class PhotoFragment : BaseFragment(){
         // Bind to LocalService
         var intent = Intent(getMainActivity(), DownloadImageService::class.java)
         intent.putExtra(PhotoApplication.photoApplication!!.getString(R.string.photoLink),photoLink)
-
+        if (SERVICE_BOUND) {
+            getMainActivity()?.unbindService(downloadServiceConnection)
+        }
         getMainActivity()?.bindService(intent, downloadServiceConnection, Context.BIND_AUTO_CREATE)
     }
 
